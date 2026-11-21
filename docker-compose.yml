@@ -1,0 +1,18 @@
+services:
+  sim:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: lcmr-sim
+    # Gazebo Classic has no arm64 build; on Apple Silicon this runs through Rosetta.
+    platform: linux/amd64
+    volumes:
+      - .:/ws
+    ports:
+      - "6080:6080"   # RViz in the browser: http://localhost:6080/vnc.html
+    environment:
+      - ANTHROPIC_API_KEY
+      - LCMR_MODEL
+    shm_size: 512m
+    stdin_open: true
+    tty: true

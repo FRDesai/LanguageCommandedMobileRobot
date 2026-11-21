@@ -1,0 +1,17 @@
+# Private planning doc — keep out of the public repo
+PRD.md
+claude.md
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# colcon workspace output
+build/
+install/
+log/
+
+# Runtime output and secrets
+logs/
+.env

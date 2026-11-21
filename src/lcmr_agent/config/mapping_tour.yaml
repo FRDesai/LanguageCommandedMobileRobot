@@ -1,0 +1,31 @@
+# Waypoints (x, y in metres, map frame = Gazebo world frame) that take the robot
+# through every room of the TurtleBot3 house once, for building the SLAM map.
+# Worked out from the wall positions in turtlebot3_house/model.sdf.
+waypoints:
+  - [1.1, -0.9]     # porch, in front of the entrance door
+  - [1.1, 0.35]     # hall
+  - [-1.5, 0.6]     # living room, south side
+  - [-2.6, 3.9]     # living room, north side
+  - [-4.3, 3.3]     # by the study door
+  - [-6.4, 3.4]     # study
+  - [-6.3, 1.7]     # study, by the bedroom door
+  - [-6.3, 0.1]     # bedroom, just inside
+  - [-6.5, -2.6]    # bedroom, far end
+  - [-6.3, 1.7]
+  - [-4.3, 3.3]
+  - [-1.0, 4.4]     # living room, north-east corner
+  - [-1.0, 0.4]
+  - [1.6, 0.35]     # hall, east end
+  - [3.3, 0.5]      # dining room, just inside
+  - [6.4, 3.8]      # dining room, far corner
+  - [3.3, 4.6]      # by the bathroom door
+  - [1.1, 4.5]      # bathroom
+  - [1.0, 2.0]      # bathroom, far end
+  - [3.3, 4.6]
+  - [6.2, 0.6]      # by the kitchen door
+  - [6.2, -1.2]     # kitchen, just inside
+  - [5.8, -4.4]     # kitchen, far end
+  - [6.2, 0.6]
+  - [1.6, 0.35]
+  - [1.1, -0.9]
+  - [-2.0, -0.5]    # back to the start
