@@ -14,8 +14,8 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 # Where the robot is spawned in the Gazebo world. Gazebo's odometry starts at
 # this world position, so the SLAM map shares the world's coordinates and this
 # is also AMCL's starting pose (see bringup.launch.py).
-SPAWN_X = "-2.0"
-SPAWN_Y = "-0.5"
+SPAWN_X = "-3.5"
+SPAWN_Y = "1.0"
 
 
 def generate_launch_description():

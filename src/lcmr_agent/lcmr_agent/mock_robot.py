@@ -79,6 +79,9 @@ class MockRobot:
         with self._lock:
             self._battery = percent
 
+    def shutdown(self) -> None:
+        """Nothing to release; here so both backends end the same way."""
+
     def _move(self, start: Pose, goal: Pose, fraction: float) -> None:
         with self._lock:
             self._pose = Pose(start.x + (goal.x - start.x) * fraction,

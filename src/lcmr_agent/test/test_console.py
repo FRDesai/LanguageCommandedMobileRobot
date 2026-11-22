@@ -1,7 +1,8 @@
+import sys
 import time
 
 from lcmr_agent.agent import Agent
-from lcmr_agent.console import Console
+from lcmr_agent.console import Console, main
 from lcmr_agent.locations import Locations
 from lcmr_agent.mock_robot import MockRobot
 from lcmr_agent.robot import NavStatus, Pose
@@ -63,3 +64,14 @@ def test_blank_input_is_ignored(log, tmp_path):
     console.submit("   ")
     console.wait()
     assert replies == []
+
+
+def test_main_shuts_the_robot_down_when_the_user_quits(toolbox, robot, locations, log, monkeypatch):
+    session = Session(Agent(FakeClient([]), toolbox, log), robot, log)
+    monkeypatch.setattr("lcmr_agent.app.build", lambda args: (session, robot, locations, log))
+    monkeypatch.setattr(sys, "argv", ["chat"])
+    monkeypatch.setattr("builtins.input", lambda prompt="": "quit")
+
+    main()
+
+    assert robot.shut_down

@@ -3,11 +3,11 @@
 # Gazebo world frame of the TurtleBot3 house). Each pose is an open spot inside
 # the room, clear of walls and furniture.
 locations:
-  dock: {x: -2.0, y: -0.5, yaw: 0.0}          # front porch, where the robot starts
+  dock: {x: -3.5, y: 1.0, yaw: 0.0}           # living room, west side; where the robot starts
   hall: {x: 1.1, y: 0.35, yaw: 1.57}          # just inside the entrance door
   living_room: {x: -1.5, y: 1.2, yaw: 1.57}
   office: {x: -6.4, y: 3.2, yaw: 3.14}        # north-west room
   bedroom: {x: -6.5, y: -2.0, yaw: -1.57}     # south-west room
-  bathroom: {x: 1.0, y: 2.8, yaw: 1.57}       # small room north of the hall
-  dining_room: {x: 6.0, y: 2.0, yaw: 0.0}     # north-east room
+  bathroom: {x: 1.2, y: 4.6, yaw: 3.14}       # small room north of the hall; just inside, in line with its door
+  dining_room: {x: 4.4, y: 1.0, yaw: 1.57}    # north-east room, open floor south of the table
   kitchen: {x: 5.7, y: -4.2, yaw: -1.57}      # south-east room

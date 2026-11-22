@@ -23,15 +23,20 @@ locations:
 
 
 class RecordingRobot(MockRobot):
-    """MockRobot that remembers every goal it was asked to drive to."""
+    """MockRobot that remembers every goal it was asked to drive to, and being shut down."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.goals = []
+        self.shut_down = False
 
     def navigate_to_pose(self, pose):
         self.goals.append(pose)
         return super().navigate_to_pose(pose)
+
+    def shutdown(self):
+        self.shut_down = True
+        super().shutdown()
 
 
 @pytest.fixture

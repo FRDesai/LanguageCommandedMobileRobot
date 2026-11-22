@@ -50,3 +50,6 @@ class Robot(Protocol):
     def get_navigation_status(self) -> NavStatus: ...
 
     def get_battery_percent(self) -> float: ...
+
+    def shutdown(self) -> None:
+        """Release the backend. Call once, when the program is ending."""

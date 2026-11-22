@@ -11,8 +11,9 @@ from .event_log import EventLog
 def replay(cases: dict[str, Case], console: Console, robot, log: EventLog, runs: int) -> None:
     for run in range(1, runs + 1):
         for case in cases.values():
-            if case.battery_percent is not None:
-                robot.set_battery_percent(case.battery_percent)
+            # Every case starts on a full battery unless it sets its own level, so
+            # the trips of earlier cases cannot trip the low-battery rule in later ones.
+            robot.set_battery_percent(100.0 if case.battery_percent is None else case.battery_percent)
             log.write("case_started", case_id=case.id, run=run, command=case.command)
 
             console.submit(case.command)
@@ -41,7 +42,10 @@ def main() -> None:
         if Path(args.log).exists():
             parser.error(f"{args.log} already exists; choose a new --log so runs are not mixed")
         session, robot, _, log = build(args)
-        replay(cases, Console(session, write=lambda reply: print(f"  -> {reply}")), robot, log, args.runs)
+        try:
+            replay(cases, Console(session, write=lambda reply: print(f"  -> {reply}")), robot, log, args.runs)
+        finally:
+            robot.shutdown()
     print(format_report(score(load_events(args.log), cases)))
 
 

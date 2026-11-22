@@ -15,22 +15,27 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
+from lcmr_agent.nav2_params import merge
+
 
 # Must match the spawn pose in sim.launch.py.
-SPAWN_X = -2.0
-SPAWN_Y = -0.5
+SPAWN_X = -3.5
+SPAWN_Y = 1.0
 
 
-def _nav2_params_with_initial_pose() -> str:
-    """TurtleBot3's stock Nav2 parameters, plus AMCL's starting pose.
+def _nav2_params(changes_path: str) -> str:
+    """TurtleBot3's stock Nav2 parameters, plus AMCL's starting pose and this project's changes.
 
     The map uses the Gazebo world's coordinates, so the robot starts where
-    sim.launch.py spawns it. Nothing else in the stock file is changed.
+    sim.launch.py spawns it. The only other differences from the stock file
+    are the ones listed in config/nav2_changes.yaml.
     """
     stock = os.path.join(get_package_share_directory("turtlebot3_navigation2"),
                          "param", "humble", os.environ["TURTLEBOT3_MODEL"] + ".yaml")
     with open(stock) as file:
         params = yaml.safe_load(file)
+    with open(changes_path) as file:
+        params = merge(params, yaml.safe_load(file) or {})
     params["amcl"]["ros__parameters"].update(
         set_initial_pose=True, initial_pose={"x": SPAWN_X, "y": SPAWN_Y, "z": 0.0, "yaw": 0.0})
     out = tempfile.NamedTemporaryFile("w", suffix=".yaml", prefix="lcmr_nav2_", delete=False)
@@ -52,7 +57,7 @@ def _launch(context):
         include(share, "launch", "sim.launch.py"),
         include(nav2_bringup, "launch", "bringup_launch.py",
                 map=LaunchConfiguration("map"), use_sim_time="true",
-                params_file=_nav2_params_with_initial_pose()),
+                params_file=_nav2_params(LaunchConfiguration("nav2_changes").perform(context))),
         include(nav2_bringup, "launch", "rviz_launch.py",
                 condition=IfCondition(LaunchConfiguration("rviz")), use_sim_time="true"),
         Node(package="lcmr_agent", executable="chat", arguments=["--backend", "ros"],
@@ -62,9 +67,13 @@ def _launch(context):
 
 
 def generate_launch_description():
-    default_map = os.path.join(get_package_share_directory("lcmr_agent"), "maps", "house.yaml")
+    share = get_package_share_directory("lcmr_agent")
+    default_map = os.path.join(share, "maps", "house.yaml")
+    default_changes = os.path.join(share, "config", "nav2_changes.yaml")
     return LaunchDescription([
         DeclareLaunchArgument("map", default_value=default_map, description="saved SLAM map"),
+        DeclareLaunchArgument("nav2_changes", default_value=default_changes,
+                              description="changes applied on top of the stock Nav2 parameters"),
         DeclareLaunchArgument("rviz", default_value="true", description="open RViz"),
         DeclareLaunchArgument("chat", default_value="true",
                               description="open the chat window (needs ANTHROPIC_API_KEY)"),

@@ -53,6 +53,7 @@ def main() -> None:
         console.submit(line)
     robot.cancel_navigation()
     console.wait()
+    robot.shutdown()
     print()
 
 
