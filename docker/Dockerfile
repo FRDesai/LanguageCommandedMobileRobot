@@ -19,12 +19,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Ubuntu 22.04 ships Pydantic 1; the agent needs Pydantic 2 and the Anthropic SDK.
 RUN pip3 install --no-cache-dir "pydantic>=2" anthropic pytest
 
-# The house world's furniture comes from Gazebo's online model database. Fetch it
-# now so the simulator does not stall downloading it on first start.
+# The house world's ground, light and furniture come from Gazebo's online model
+# database. Fetch them now: without a local copy Gazebo looks them up online at
+# every start, and when that server is slow the robot fails to spawn.
 RUN apt-get update && apt-get install -y --no-install-recommends xterm curl \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /root/.gazebo/models \
-    && for model in cafe_table first_2015_trash_can mailbox table_marble; do \
+    && for model in ground_plane sun cafe_table first_2015_trash_can mailbox table_marble; do \
          curl -fsSL "http://models.gazebosim.org/$model/model.tar.gz" | tar xz -C /root/.gazebo/models; \
        done
 

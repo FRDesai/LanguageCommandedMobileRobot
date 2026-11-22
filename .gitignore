@@ -15,3 +15,4 @@ log/
 # Runtime output and secrets
 logs/
 .env
+.claude/settings.local.json
