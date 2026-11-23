@@ -75,3 +75,18 @@ def test_main_shuts_the_robot_down_when_the_user_quits(toolbox, robot, locations
     main()
 
     assert robot.shut_down
+
+
+def test_main_accepts_the_ros_arguments_that_ros2_launch_appends(toolbox, robot, locations, log, monkeypatch):
+    # ros2 launch starts every Node as "<executable> <arguments> --ros-args -r __node:=..."
+    session = Session(Agent(FakeClient([]), toolbox, log), robot, log)
+    built = []
+    monkeypatch.setattr("lcmr_agent.app.build",
+                        lambda args: built.append(args) or (session, robot, locations, log))
+    monkeypatch.setattr(sys, "argv", ["chat", "--backend", "ros", "--ros-args", "-r", "__node:=chat"])
+    monkeypatch.setattr("builtins.input", lambda prompt="": "quit")
+
+    main()
+
+    assert built[0].backend == "ros"
+    assert robot.shut_down

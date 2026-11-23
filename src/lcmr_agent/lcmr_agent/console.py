@@ -39,7 +39,8 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="Send plain-English commands to the robot.")
     add_common_arguments(parser)
-    session, robot, locations, _ = build(parser.parse_args())
+    args, _ = parser.parse_known_args()  # leave the --ros-args that ros2 launch appends
+    session, robot, locations, _ = build(args)
     console = Console(session, write=lambda reply: print(f"\nrobot> {reply}\n> ", end="", flush=True))
 
     print(f'Rooms: {", ".join(locations.names())}. Type a command, "stop" to cancel, "quit" to exit.')
