@@ -9,6 +9,9 @@ it moves.** The agent can only name a room from a fixed list. It never sends vel
 or motor commands, so a wrong or manipulated answer from the model can at worst send the robot to
 the wrong room.
 
+**[Watch the demo video](https://drive.google.com/file/d/1jCU53kWgUNRrp2kXO0vOach03j9dZKS3/view?usp=sharing)**:
+a multi-step command, a stop mid-trip, and the agent refusing coordinates and unknown rooms.
+
 On a fixed set of 30 commands replayed three times against the full stack, 89 of 90 commands passed.
 The numbers, the one failure and the problems found on the way are in [Results](#results) and
 [What went wrong on the way](#what-went-wrong-on-the-way).
